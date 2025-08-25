@@ -68,17 +68,42 @@ const Index = () => {
     return () => clearInterval(interval);
   }, [currentCpu]);
 
+  const aiResponses = [
+    "Checking server logs for anomalies...",
+    "CPU spike detected. Investigating root cause.",
+    "Database queries optimized. Performance improved by 23%.",
+    "Memory usage within normal parameters.",
+    "Scaling horizontally to handle increased load.",
+    "Deployment pipeline executing successfully.",
+    "Monitoring alerts configured for critical thresholds.",
+    "Backup verification completed. All systems nominal.",
+    "Network latency optimized. Response time improved.",
+    "Security patches applied. System hardening complete."
+  ];
+
   const handleSendMessage = () => {
     if (newMessage.trim()) {
-      const message = {
+      const userMessage = {
         id: messages.length + 1,
         user: "You",
         text: newMessage,
         time: new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }),
         avatar: "Y"
       };
-      setMessages(prev => [...prev, message]);
+      setMessages(prev => [...prev, userMessage]);
       setNewMessage("");
+
+      // AI Assistant response after 1-2 seconds
+      setTimeout(() => {
+        const aiResponse = {
+          id: messages.length + 2,
+          user: "DevOps AI",
+          text: aiResponses[Math.floor(Math.random() * aiResponses.length)],
+          time: new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }),
+          avatar: "AI"
+        };
+        setMessages(prev => [...prev, aiResponse]);
+      }, 1000 + Math.random() * 1000);
     }
   };
 
