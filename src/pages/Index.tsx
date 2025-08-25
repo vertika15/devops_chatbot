@@ -22,9 +22,12 @@ import {
 
 // Mock data for the dashboard
 const mockMessages = [
-  { id: 1, user: "Alice", text: "CPU usage spiking on prod server", time: "14:32", avatar: "A" },
-  { id: 2, user: "Bob", text: "Investigating the memory leak", time: "14:35", avatar: "B" },
-  { id: 3, user: "Charlie", text: "Database queries are optimized now", time: "14:38", avatar: "C" },
+  { id: 1, user: "Alice", text: "🚨 Production server web-01 showing 89% CPU usage", time: "14:32", avatar: "A" },
+  { id: 2, user: "DevOps AI", text: "Alert triggered: CPU > 80% for 5min. Current: 89.2% | Load: 4.3 | Memory: 74.1% | Processes: docker(45%), nginx(22%), postgres(18%)", time: "14:33", avatar: "AI" },
+  { id: 3, user: "Bob", text: "Checking memory leak in payment service container", time: "14:35", avatar: "B" },
+  { id: 4, user: "DevOps AI", text: "Memory analysis: payment-service heap 2.1GB (+47% in 2h) | GC cycles: 847/min | Suspected leak in Redis connection pool", time: "14:36", avatar: "AI" },
+  { id: 5, user: "Charlie", text: "Applied database index optimization", time: "14:38", avatar: "C" },
+  { id: 6, user: "DevOps AI", text: "DB performance improved: Avg query time 89ms→34ms (-62%) | Active connections: 23/100 | Cache hit ratio: 94.2%", time: "14:39", avatar: "AI" },
 ];
 
 const mockCpuData = Array.from({ length: 20 }, (_, i) => ({
@@ -68,18 +71,21 @@ const Index = () => {
     return () => clearInterval(interval);
   }, [currentCpu]);
 
-  const aiResponses = [
-    "Checking server logs for anomalies...",
-    "CPU spike detected. Investigating root cause.",
-    "Database queries optimized. Performance improved by 23%.",
-    "Memory usage within normal parameters.",
-    "Scaling horizontally to handle increased load.",
-    "Deployment pipeline executing successfully.",
-    "Monitoring alerts configured for critical thresholds.",
-    "Backup verification completed. All systems nominal.",
-    "Network latency optimized. Response time improved.",
-    "Security patches applied. System hardening complete."
-  ];
+  const generateDataDrivenResponse = () => {
+    const responses = [
+      `System analysis: CPU ${currentCpu.toFixed(1)}% | Memory 74.2% | Load avg: ${(Math.random() * 3 + 1).toFixed(1)} | Active processes: ${Math.floor(Math.random() * 50 + 120)}`,
+      `Alert resolved: Response time improved to ${Math.floor(Math.random() * 100 + 50)}ms (-${Math.floor(Math.random() * 40 + 20)}%) | Error rate: 0.${Math.floor(Math.random() * 9 + 1)}%`,
+      `Database metrics: Active connections ${Math.floor(Math.random() * 20 + 15)}/100 | Query time: ${Math.floor(Math.random() * 50 + 20)}ms | Cache hit: ${Math.floor(Math.random() * 10 + 90)}%`,
+      `Container status: docker-compose up | ${Math.floor(Math.random() * 5 + 8)} services running | Memory usage: ${Math.floor(Math.random() * 20 + 60)}% | Disk I/O: ${Math.floor(Math.random() * 30 + 10)}%`,
+      `Network analysis: Throughput ${Math.floor(Math.random() * 100 + 80)}MB/s | Latency: ${Math.floor(Math.random() * 10 + 5)}ms | Packet loss: 0.0${Math.floor(Math.random() * 9)}%`,
+      `Security scan: ${Math.floor(Math.random() * 1000 + 500)} packages checked | ${Math.floor(Math.random() * 3)} vulnerabilities found | Last backup: ${Math.floor(Math.random() * 4 + 1)}h ago`,
+      `Scaling event: Auto-scaled to ${Math.floor(Math.random() * 3 + 3)} instances | Load balanced across ${Math.floor(Math.random() * 2 + 2)} zones | Target CPU: 70%`,
+      `Log analysis: ${Math.floor(Math.random() * 50 + 20)}K entries processed | ${Math.floor(Math.random() * 5)} warnings | ${Math.floor(Math.random() * 2)} errors | Pattern: normal`,
+      `Deployment status: Build #${Math.floor(Math.random() * 100 + 200)} successful | Tests passed: ${Math.floor(Math.random() * 20 + 180)}/200 | Deploy time: ${Math.floor(Math.random() * 60 + 120)}s`,
+      `Performance boost: CDN cache hit ${Math.floor(Math.random() * 10 + 85)}% | GZIP enabled | Images optimized | Page load: ${Math.floor(Math.random() * 500 + 800)}ms`
+    ];
+    return responses[Math.floor(Math.random() * responses.length)];
+  };
 
   const handleSendMessage = () => {
     if (newMessage.trim()) {
@@ -98,7 +104,7 @@ const Index = () => {
         const aiResponse = {
           id: messages.length + 2,
           user: "DevOps AI",
-          text: aiResponses[Math.floor(Math.random() * aiResponses.length)],
+          text: generateDataDrivenResponse(),
           time: new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }),
           avatar: "AI"
         };
